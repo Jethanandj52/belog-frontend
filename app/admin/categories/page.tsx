@@ -23,23 +23,34 @@ export default function CategoriesPage() {
   const [loading, setLoading] = useState(true);
   const [newCatName, setNewCatName] = useState("");
   const [isAdding, setIsAdding] = useState(false);
+  const [token, setToken] = useState<string | null>(null); // ✅ client-side token
 
   const API_BASE = "http://localhost:5000/categories";
-  const headers = { Authorization: `Bearer ${localStorage.getItem("token")}` };
+
+  // ✅ Fetch token from localStorage client-side
+  useEffect(() => {
+    const storedToken = localStorage.getItem("token");
+    if (storedToken) setToken(storedToken);
+  }, []);
+
+  const headers = token ? { Authorization: `Bearer ${token}` } : {};
 
   const fetchCategories = async () => {
     try {
       setLoading(true);
-      const res = await axios.get(API_BASE);
+      const res = await axios.get(API_BASE, { headers });
       if (res.data.success) setCategories(res.data.categories);
+    } catch (err) {
+      console.error("Error fetching categories:", err);
+      setCategories([]);
     } finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
-    fetchCategories();
-  }, []);
+    if (token) fetchCategories(); // ✅ only fetch after token is available
+  }, [token]);
 
   const handleAddCategory = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -156,9 +167,6 @@ export default function CategoriesPage() {
                   className="text-slate-500 group-hover:text-purple-500 transition"
                 />
               </div>
-
-              {/* Decorative Icon */}
-              
             </motion.div>
           ))}
         </div>
