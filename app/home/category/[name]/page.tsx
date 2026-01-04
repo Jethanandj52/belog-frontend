@@ -9,9 +9,10 @@ import { BlogCard, BlogSkeleton } from "../../../components/BlogCard";
 export default function CategoryPage() {
   const { name } = useParams(); // URL se category name nikalne ke liye
   const router = useRouter();
-  const [blogs, setBlogs] = useState([]);
+  const [blogs, setBlogs] = useState<any[]>([]); // type added for safety
   const [loading, setLoading] = useState(true);
 
+  // ✅ Client-side effect only
   useEffect(() => {
     const fetchCategoryBlogs = async () => {
       try {
@@ -20,9 +21,12 @@ export default function CategoryPage() {
         const res = await axios.get(`http://localhost:5000/blogs?category=${name}`);
         if (res.data.success) {
           setBlogs(res.data.blogs);
+        } else {
+          setBlogs([]);
         }
       } catch (err) {
         console.error("Error fetching category blogs:", err);
+        setBlogs([]);
       } finally {
         setLoading(false);
       }
@@ -31,12 +35,13 @@ export default function CategoryPage() {
     if (name) fetchCategoryBlogs();
   }, [name]);
 
-  const decodedName = decodeURIComponent(name as string);
+  // ✅ Decode category name safely
+  const decodedName = typeof name === "string" ? decodeURIComponent(name) : "";
 
   return (
     <div className="min-h-screen bg-[#fafafa] pt-32 pb-20">
       <div className="max-w-7xl mx-auto px-6">
-        
+
         {/* Back Button & Header */}
         <div className="mb-16">
           <button 
@@ -51,9 +56,11 @@ export default function CategoryPage() {
             <Sparkles size={16} /> 
             Category Collection
           </div>
+
           <h1 className="text-6xl md:text-8xl font-[1000] tracking-tightest italic text-slate-950 uppercase leading-none">
             {decodedName}<span className="text-blue-600">.</span>
           </h1>
+
           <p className="text-slate-500 mt-6 text-lg font-medium italic">
             Showing all stories filed under {decodedName}
           </p>
@@ -71,7 +78,7 @@ export default function CategoryPage() {
             className="grid md:grid-cols-2 lg:grid-cols-3 gap-10"
           >
             {blogs.map((blog, i) => (
-              <BlogCard   blog={blog} index={i} />
+              <BlogCard key={i} blog={blog} index={i} />
             ))}
           </motion.div>
         ) : (
