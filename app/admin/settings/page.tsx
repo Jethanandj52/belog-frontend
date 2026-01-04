@@ -13,7 +13,7 @@ export default function SettingsPage() {
     setLoading(true);
     try {
       const token = localStorage.getItem("token");
-      const { data } = await axios.post("http://localhost:5000/auth/change-password", passwords, {
+      const { data } = await axios.post("https://belogbackend.vercel.app/auth/change-password", passwords, {
         headers: { Authorization: `Bearer ${token}` }
       });
       if (data.success) {

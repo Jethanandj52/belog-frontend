@@ -25,7 +25,7 @@ export default function CategoriesPage() {
   const [isAdding, setIsAdding] = useState(false);
   const [token, setToken] = useState<string | null>(null); // ✅ client-side token
 
-  const API_BASE = "http://localhost:5000/categories";
+  const API_BASE = "https://belogbackend.vercel.app/categories";
 
   // ✅ Fetch token from localStorage client-side
   useEffect(() => {

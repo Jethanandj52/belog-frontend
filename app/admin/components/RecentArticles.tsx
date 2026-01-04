@@ -10,7 +10,7 @@ export default function RecentArticles() {
   useEffect(() => {
     const fetchArticles = async () => {
       try {
-        const res = await axios.get("http://localhost:5000/blogs"); // Public or Admin API
+        const res = await axios.get("https://belogbackend.vercel.app/blogs"); // Public or Admin API
         if (res.data.success) setArticles(res.data.blogs.slice(0, 5)); // Only top 5
       } catch (err) { console.error(err); }
       finally { setLoading(false); }

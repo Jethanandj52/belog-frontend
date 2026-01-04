@@ -28,7 +28,7 @@ export default function UserMenu() {
         }
 
         const { data } = await axios.get(
-          `http://localhost:5000/auth/getUserById/${userId}`,
+          `https://belogbackend.vercel.app/auth/getUserById/${userId}`,
           { 
             headers: { Authorization: `Bearer ${token}` },
             withCredentials: true 

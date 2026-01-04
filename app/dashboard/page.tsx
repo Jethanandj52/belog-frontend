@@ -23,7 +23,7 @@ export default function Dashboard() {
       const token = localStorage.getItem("token");
       const userId = localStorage.getItem("userId");
       
-      const { data } = await axios.get("http://localhost:5000/blogs");
+      const { data } = await axios.get("https://belogbackend.vercel.app/blogs");
       
       if (data.success) {
         // Sirf logged-in user ke blogs filter karein
@@ -56,7 +56,7 @@ export default function Dashboard() {
     if (!confirm("Are you sure?")) return;
     try {
       const token = localStorage.getItem("token");
-      await axios.delete(`http://localhost:5000/blogs/${id}`, {
+      await axios.delete(`https://belogbackend.vercel.app/blogs/${id}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       fetchDashboardData(); // Refresh data

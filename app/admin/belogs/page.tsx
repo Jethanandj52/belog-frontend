@@ -18,9 +18,9 @@ export default function BlogListPage() {
       try {
         setLoading(true);
         // 1. Blogs Fetch karein
-        const blogRes = await axios.get("http://localhost:5000/blogs");
+        const blogRes = await axios.get("https://belogbackend.vercel.app/blogs");
         // 2. Categories Fetch karein (Dropdown ke liye)
-        const catRes = await axios.get("http://localhost:5000/categories");
+        const catRes = await axios.get("https://belogbackend.vercel.app/categories");
 
         if (blogRes.data.success) setBlogs(blogRes.data.blogs);
         if (catRes.data.success) setCategories(catRes.data.categories);

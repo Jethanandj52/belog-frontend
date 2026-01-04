@@ -31,7 +31,7 @@ export default function WritePage() {
 
   const fetchCategories = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/categories");
+      const res = await axios.get("https://belogbackend.vercel.app/categories");
       if (res.data.success) {
         setCategories(res.data.categories);
       }
@@ -66,7 +66,7 @@ export default function WritePage() {
       // STEP 1: Handle New Category
       if (isAddingNewCategory && newCategoryName) {
         const catRes = await axios.post(
-          "http://localhost:5000/categories", 
+          "https://belogbackend.vercel.app/categories", 
           { name: newCategoryName },
           { headers: { Authorization: `Bearer ${token}` } }
         );
@@ -88,7 +88,7 @@ export default function WritePage() {
       data.append("backlink", formData.backlink);
       data.append("anchorText", formData.anchorText);
 
-      const res = await axios.post("http://localhost:5000/guest-posts", data, {
+      const res = await axios.post("https://belogbackend.vercel.app/guest-posts", data, {
         headers: { "Content-Type": "multipart/form-data" }
       });
 

@@ -25,7 +25,7 @@ export default function BlogDetailPage() {
   useEffect(() => {
     const fetchBlogDetail = async () => {
       try {
-        const { data } = await axios.get(`http://localhost:5000/blogs/${slug}`);
+        const { data } = await axios.get(`https://belogbackend.vercel.app/blogs/${slug}`);
         if (data.success) {
           setBlog(data.blog);
         }

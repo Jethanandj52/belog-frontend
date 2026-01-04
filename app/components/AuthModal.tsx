@@ -16,7 +16,7 @@ export default function AuthModal({ isOpen, onClose }: { isOpen: boolean; onClos
     username: "", email: "", password: "", confirmPassword: "", otp: "", newPassword: "" 
   });
 
-  const API_URL = "http://localhost:5000/auth";
+  const API_URL = "https://belogbackend.vercel.app/auth";
 
   // 1. Login aur Register handle karne ke liye
   const handleAuth = async (e: React.FormEvent) => {

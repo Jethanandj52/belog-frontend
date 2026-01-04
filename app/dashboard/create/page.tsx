@@ -28,7 +28,7 @@ export default function CreatePost() {
 
   const fetchCategories = async () => {
     try {
-      const { data } = await axios.get("http://localhost:5000/categories");
+      const { data } = await axios.get("https://belogbackend.vercel.app/categories");
       if (data.success) setCategories(data.categories);
     } catch (err) { console.error(err); }
   };
@@ -61,7 +61,7 @@ export default function CreatePost() {
 
       // --- STEP 1: Agar user ne nayi category likhi hai, toh pehle use create karein ---
       if (isAddingNewCategory && newCategoryName) {
-        const catRes = await axios.post("http://localhost:5000/categories", 
+        const catRes = await axios.post("https://belogbackend.vercel.app/categories", 
           { name: newCategoryName },
           { headers: { Authorization: `Bearer ${token}` } }
         );
@@ -79,7 +79,7 @@ export default function CreatePost() {
       formData.append("featuredImage", featuredImage);
       galleryImages.forEach(file => formData.append("images", file));
 
-      const { data } = await axios.post("http://localhost:5000/blogs", formData, {
+      const { data } = await axios.post("https://belogbackend.vercel.app/blogs", formData, {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "multipart/form-data",

@@ -18,7 +18,7 @@ export default function CategoryPage() {
       try {
         setLoading(true);
         // Backend API jo category ke hisaab se filter kare
-        const res = await axios.get(`http://localhost:5000/blogs?category=${name}`);
+        const res = await axios.get(`https://belogbackend.vercel.app/blogs?category=${name}`);
         if (res.data.success) {
           setBlogs(res.data.blogs);
         } else {

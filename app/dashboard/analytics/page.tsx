@@ -15,7 +15,7 @@ export default function Analytics() {
     const fetchAnalytics = async () => {
       try {
         const userId = localStorage.getItem("userId");
-        const { data } = await axios.get("http://localhost:5000/blogs");
+        const { data } = await axios.get("https://belogbackend.vercel.app/blogs");
         
         if (data.success) {
           const myBlogs = data.blogs.filter((b: any) => b.authorId?._id === userId);

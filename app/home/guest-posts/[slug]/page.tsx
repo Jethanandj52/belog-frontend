@@ -15,7 +15,7 @@ export default function GuestPostDetail() {
     const fetchDetail = async () => {
       try {
         // Backend API calling using SLUG
-        const { data } = await axios.get(`http://localhost:5000/guest-posts/${slug}`);
+        const { data } = await axios.get(`https://belogbackend.vercel.app/guest-posts/${slug}`);
         if (data.success) {
           setPost(data.post);
         }

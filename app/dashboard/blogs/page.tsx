@@ -13,7 +13,7 @@ export default function BlogsPage() {
   // 1. Fetch User's Blogs from Backend
   const fetchBlogs = async () => {
     try {
-      const { data } = await axios.get("http://localhost:5000/blogs");
+      const { data } = await axios.get("https://belogbackend.vercel.app/blogs");
       if (data.success) {
         // LocalStorage se logged-in user ki ID nikaalna
         const userId = localStorage.getItem("userId");
@@ -37,7 +37,7 @@ export default function BlogsPage() {
     
     try {
       const token = localStorage.getItem("token");
-      const { data } = await axios.delete(`http://localhost:5000/blogs/${id}`, {
+      const { data } = await axios.delete(`https://belogbackend.vercel.app/blogs/${id}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       if (data.success) {

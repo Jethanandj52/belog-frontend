@@ -25,7 +25,7 @@ export default function ProfilePage() {
         if (!userId || !token) return;
 
         const { data } = await axios.get(
-          `http://localhost:5000/auth/getUserById/${userId}`,
+          `https://belogbackend.vercel.app/auth/getUserById/${userId}`,
           { headers: { Authorization: `Bearer ${token}` } }
         );
 
@@ -49,7 +49,7 @@ export default function ProfilePage() {
     try {
       const token = localStorage.getItem("token");
       const { data } = await axios.post(
-        "http://localhost:5000/auth/edit-user",
+        "https://belogbackend.vercel.app/auth/edit-user",
         formData,
         { headers: { Authorization: `Bearer ${token}` } }
       );

@@ -20,7 +20,7 @@ export default function GuestRequests() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
-  const API_BASE = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
+  const API_BASE = process.env.NEXT_PUBLIC_API_URL || "https://belogbackend.vercel.app";
 
   // Auth Headers (Ensure token exists)
   const getHeaders = () => ({

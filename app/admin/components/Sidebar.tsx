@@ -27,7 +27,7 @@ export default function Sidebar() {
 
     if (userId) {
       // Backend se latest profile data fetch karna
-      axios.get(`http://localhost:5000/auth/getUserById/${userId}`, {
+      axios.get(`https://belogbackend.vercel.app/auth/getUserById/${userId}`, {
         headers: { Authorization: `Bearer ${token}` }
       })
       .then(res => {
@@ -47,7 +47,7 @@ export default function Sidebar() {
   const handleLogout = async () => {
     try {
       const token = localStorage.getItem("token");
-      await axios.post("http://localhost:5000/auth/logout", {}, {
+      await axios.post("https://belogbackend.vercel.app/auth/logout", {}, {
         headers: { Authorization: `Bearer ${token}` }
       });
       

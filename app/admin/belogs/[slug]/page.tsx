@@ -27,7 +27,7 @@ export default function BlogDetailPage() {
 
   const fetchBlog = async () => {
     try {
-      const res = await axios.get(`http://localhost:5000/blogs/${slug}`);
+      const res = await axios.get(`https://belogbackend.vercel.app/blogs/${slug}`);
       if (res.data.success) {
         setBlog(res.data.blog);
         // Check if current user (from localstorage/context) liked it
@@ -45,7 +45,7 @@ export default function BlogDetailPage() {
   // --- Handlers ---
   const handleLike = async () => {
     try {
-      const res = await axios.put(`http://localhost:5000/blogs/${blog._id}/like`, {}, {
+      const res = await axios.put(`https://belogbackend.vercel.app/blogs/${blog._id}/like`, {}, {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
       });
       if (res.data.success) {
@@ -58,7 +58,7 @@ export default function BlogDetailPage() {
   const handleComment = async () => {
     if (!commentText.trim()) return;
     try {
-      const res = await axios.post(`http://localhost:5000/blogs/${blog._id}/comment`, { text: commentText }, {
+      const res = await axios.post(`https://belogbackend.vercel.app/blogs/${blog._id}/comment`, { text: commentText }, {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
       });
       setBlog({ ...blog, comments: res.data.comments });
@@ -69,7 +69,7 @@ export default function BlogDetailPage() {
   const handleReply = async (commentId: string) => {
     if (!replyText.trim()) return;
     try {
-      const res = await axios.post(`http://localhost:5000/blogs/${blog._id}/comment/${commentId}/reply`, { text: replyText }, {
+      const res = await axios.post(`https://belogbackend.vercel.app/blogs/${blog._id}/comment/${commentId}/reply`, { text: replyText }, {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
       });
       setBlog({ ...blog, comments: res.data.comments });

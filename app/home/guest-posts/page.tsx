@@ -10,7 +10,7 @@ export default function GuestPostsLibrary() {
   useEffect(() => {
     const fetchPosts = async () => {
       try {
-        const { data } = await axios.get("http://localhost:5000/guest-posts");
+        const { data } = await axios.get("https://belogbackend.vercel.app/guest-posts");
         if (data.success) {
           // Sirf approved posts dikhayein
           const approved = data.posts.filter((p: any) => p.status === "approved");

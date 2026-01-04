@@ -28,8 +28,8 @@ export default function EditBlogPage() {
         
         // Parallel requests for categories and the specific blog
         const [catRes, blogRes] = await Promise.all([
-          axios.get("http://localhost:5000/categories"),
-          axios.get(`http://localhost:5000/blogs`) // Get all and find by ID locally or add a GET BY ID route
+          axios.get("https://belogbackend.vercel.app/categories"),
+          axios.get(`https://belogbackend.vercel.app/blogs`) // Get all and find by ID locally or add a GET BY ID route
         ]);
 
         if (catRes.data.success) setCategories(catRes.data.categories);
@@ -80,7 +80,7 @@ export default function EditBlogPage() {
     }
 
     try {
-      const { data } = await axios.put(`http://localhost:5000/blogs/${id}`, formData, {
+      const { data } = await axios.put(`https://belogbackend.vercel.app/blogs/${id}`, formData, {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "multipart/form-data",

@@ -51,7 +51,7 @@ export default function UsersPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
-  const API_BASE = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
+  const API_BASE = process.env.NEXT_PUBLIC_API_URL || "https://belogbackend.vercel.app/";
 
   const getHeaders = () => ({
     headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }

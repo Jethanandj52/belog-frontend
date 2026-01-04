@@ -19,9 +19,9 @@ export default function BlogListPage() {
         
         // Dono APIs se data fetch karna
         const [blogRes, catRes, guestRes] = await Promise.all([
-          axios.get("http://localhost:5000/blogs"),
-          axios.get("http://localhost:5000/categories"),
-          axios.get("http://localhost:5000/guest-posts")
+          axios.get("https://belogbackend.vercel.app/blogs"),
+          axios.get("https://belogbackend.vercel.app/categories"),
+          axios.get("https://belogbackend.vercel.app/guest-posts")
         ]);
 
         let combinedData: any[] = [];
