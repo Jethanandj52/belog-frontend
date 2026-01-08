@@ -1,13 +1,13 @@
 "use client";
 import React, { useState } from "react";
-import { Shield, Bell, Eye, Smartphone, Lock, Loader2 } from "lucide-react";
+import { Shield, Bell, Lock, Loader2, Zap, Trash2, ShieldCheck } from "lucide-react";
 import axios from "axios";
+import { motion } from "framer-motion";
 
 export default function SettingsPage() {
   const [passwords, setPasswords] = useState({ currentPassword: "", newPassword: "", confirmPassword: "" });
   const [loading, setLoading] = useState(false);
 
-  // Change Password Handler
   const handlePasswordChange = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
@@ -28,88 +28,124 @@ export default function SettingsPage() {
   };
 
   return (
-    <div className="p-8 max-w-4xl mx-auto space-y-8">
-      <h2 className="text-2xl font-black uppercase tracking-tighter italic text-slate-900">System Preferences</h2>
+    <div className="p-4 sm:p-8 max-w-5xl mx-auto space-y-6 md:space-y-8 pb-20">
+      {/* HEADER */}
+      <div className="flex items-center gap-3 mb-2">
+        <Zap size={16} className="text-[#9b2dee] fill-[#9b2dee]" />
+        <h2 className="text-2xl md:text-3xl font-[1000] uppercase tracking-tighter italic text-white">
+          System <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#9b2dee] to-[#ff00c8]">Preferences</span>
+        </h2>
+      </div>
       
-      {/* 1. Change Password Section */}
-      <div className="bg-white p-8 rounded-[2.5rem] border border-slate-100 shadow-sm">
-        <div className="flex items-center gap-3 mb-6">
-          <div className="p-2 bg-blue-50 text-blue-600 rounded-lg"><Lock size={20}/></div>
-          <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">Security Update</h4>
+      {/* 1. CHANGE PASSWORD SECTION */}
+      <motion.div 
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="bg-[#11011A]/60 backdrop-blur-xl p-6 md:p-10 rounded-[2rem] md:rounded-[3rem] border border-white/5 shadow-2xl"
+      >
+        <div className="flex items-center gap-3 mb-8">
+          <div className="p-3 bg-[#9b2dee]/10 text-[#9b2dee] rounded-xl border border-[#9b2dee]/20">
+            <Lock size={20}/>
+          </div>
+          <div>
+            <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-white/40">Security Protocol</h4>
+            <p className="text-[9px] font-bold text-[#ff00c8] uppercase">Update access credentials</p>
+          </div>
         </div>
         
-        <form onSubmit={handlePasswordChange} className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <input 
-            type="password" 
-            placeholder="Current Password"
-            className="p-4 bg-slate-50 rounded-2xl outline-none text-xs font-bold focus:ring-2 focus:ring-blue-600"
-            onChange={(e) => setPasswords({...passwords, currentPassword: e.target.value})}
-            value={passwords.currentPassword}
-          />
-          <input 
-            type="password" 
-            placeholder="New Password"
-            className="p-4 bg-slate-50 rounded-2xl outline-none text-xs font-bold focus:ring-2 focus:ring-blue-600"
-            onChange={(e) => setPasswords({...passwords, newPassword: e.target.value})}
-            value={passwords.newPassword}
-          />
+        <form onSubmit={handlePasswordChange} className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
+          <div className="space-y-2">
+            <label className="text-[9px] font-black uppercase tracking-widest text-white/20 ml-2">Current Key</label>
+            <input 
+              type="password" 
+              placeholder="••••••••"
+              className="w-full p-4 bg-white/5 border border-white/10 rounded-2xl outline-none text-xs font-bold text-white focus:border-[#9b2dee] focus:ring-1 focus:ring-[#9b2dee] transition-all"
+              onChange={(e) => setPasswords({...passwords, currentPassword: e.target.value})}
+              value={passwords.currentPassword}
+            />
+          </div>
+          <div className="space-y-2">
+            <label className="text-[9px] font-black uppercase tracking-widest text-white/20 ml-2">New Uplink Key</label>
+            <input 
+              type="password" 
+              placeholder="••••••••"
+              className="w-full p-4 bg-white/5 border border-white/10 rounded-2xl outline-none text-xs font-bold text-white focus:border-[#ff00c8] focus:ring-1 focus:ring-[#ff00c8] transition-all"
+              onChange={(e) => setPasswords({...passwords, newPassword: e.target.value})}
+              value={passwords.newPassword}
+            />
+          </div>
             
           <button 
             type="submit"
-            className="bg-blue-600 text-white rounded-2xl font-black text-[10px] uppercase tracking-widest hover:bg-slate-900 transition-all flex items-center justify-center"
+            className="md:mt-6 h-[52px] bg-gradient-to-r from-[#9b2dee] to-[#ff00c8] text-white rounded-2xl font-black text-[10px] uppercase tracking-widest hover:opacity-90 transition-all flex items-center justify-center shadow-[0_0_20px_rgba(155,45,238,0.3)] active:scale-95"
           >
-            {loading ? <Loader2 className="animate-spin"/> : "Update Password"}
+            {loading ? <Loader2 className="animate-spin"/> : "Sync Password"}
           </button>
         </form>
-      </div>
+      </motion.div>
 
-      {/* 2. Toggles Section */}
-      <SettingSection title="Privacy & Notifications">
-        <SettingToggle icon={<Shield size={18}/>} label="Two-Factor Auth" sub="Request code on login" active />
-        <SettingToggle icon={<Bell size={18}/>} label="Email Alerts" sub="Activity summaries via mail" active />
+      {/* 2. TOGGLES SECTION */}
+      <SettingSection title="Privacy & Neural Alerts">
+        <SettingToggle icon={<ShieldCheck size={18}/>} label="Neural 2FA" sub="Request biometric code on login" active />
+        <SettingToggle icon={<Bell size={18}/>} label="Stream Alerts" sub="Activity summaries via encrypted mail" />
       </SettingSection>
 
-      {/* 3. Danger Zone */}
-      <div className="bg-red-50 p-8 rounded-[2.5rem] border border-red-100 flex justify-between items-center group">
-        <div>
-          <h4 className="text-[11px] font-black uppercase tracking-widest text-red-600">Danger Zone</h4>
-          <p className="text-[10px] font-bold text-red-400 uppercase mt-1">Erase all your data forever</p>
+      {/* 3. DANGER ZONE */}
+      <motion.div 
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1 }}
+        className="bg-red-950/20 p-6 md:p-10 rounded-[2rem] md:rounded-[3rem] border border-red-900/30 flex flex-col md:flex-row justify-between items-center gap-6 group hover:border-red-600/50 transition-all"
+      >
+        <div className="text-center md:text-left">
+          <h4 className="text-[11px] font-black uppercase tracking-[0.3em] text-red-500">Purge Protocol</h4>
+          <p className="text-[10px] font-bold text-red-400/50 uppercase mt-1">Permanently erase your neural footprint</p>
         </div>
         <button 
           onClick={() => { if(confirm("Are you sure?")) { /* Add Delete API Call */ } }}
-          className="px-6 py-3 bg-red-600 text-white rounded-2xl font-black text-[10px] uppercase hover:bg-red-700 transition-all shadow-lg"
+          className="w-full md:w-auto px-8 py-4 bg-red-600/10 hover:bg-red-600 text-red-500 hover:text-white border border-red-600/30 rounded-2xl font-black text-[10px] uppercase tracking-widest transition-all shadow-xl flex items-center justify-center gap-2"
         >
-          Delete Account
+          <Trash2 size={16} /> Terminate Account
         </button>
-      </div>
+      </motion.div>
     </div>
   );
 }
 
-// Helper components remain the same...
+// Sub-components optimized for Dark Theme
 function SettingSection({ title, children }: any) {
   return (
-    <div className="bg-white p-8 rounded-[2.5rem] border border-slate-100 shadow-sm">
-      <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 mb-6">{title}</h4>
-      <div className="space-y-2">{children}</div>
-    </div>
+    <motion.div 
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      className="bg-[#11011A]/60 backdrop-blur-xl p-6 md:p-10 rounded-[2rem] md:rounded-[3rem] border border-white/5 shadow-2xl"
+    >
+      <h4 className="text-[10px] font-black uppercase tracking-[0.3em] text-white/30 mb-8 ml-2">{title}</h4>
+      <div className="space-y-3">{children}</div>
+    </motion.div>
   );
 }
 
 function SettingToggle({ icon, label, sub, active = false }: any) {
+  const [isOn, setIsOn] = useState(active);
+
   return (
-    <div className="flex items-center justify-between p-4 hover:bg-slate-50 rounded-2xl transition-all cursor-pointer group">
-      <div className="flex items-center gap-4">
-        <div className={`p-3 rounded-xl transition-colors ${active ? "bg-blue-600 text-white" : "bg-slate-100 text-slate-400 group-hover:bg-slate-200"}`}>
+    <div 
+      onClick={() => setIsOn(!isOn)}
+      className="flex items-center justify-between p-4 md:p-5 hover:bg-white/5 rounded-[1.5rem] md:rounded-2xl transition-all cursor-pointer group border border-transparent hover:border-white/5"
+    >
+      <div className="flex items-center gap-4 min-w-0">
+        <div className={`p-3 rounded-xl transition-all duration-500 shrink-0 ${isOn ? "bg-[#ff00c8] text-white shadow-[0_0_15px_#ff00c8]" : "bg-white/5 text-white/20"}`}>
           {icon}
         </div>
-        <div>
-          <p className="text-xs font-black uppercase tracking-widest text-slate-900">{label}</p>
-          <p className="text-[9px] font-bold text-slate-400 uppercase mt-1 tracking-tighter">{sub}</p>
+        <div className="min-w-0">
+          <p className="text-[11px] md:text-xs font-[1000] uppercase tracking-widest text-white truncate">{label}</p>
+          <p className="text-[8px] md:text-[9px] font-bold text-white/30 uppercase mt-1 tracking-tighter truncate">{sub}</p>
         </div>
       </div>
-      <div className={`w-12 h-6 rounded-full relative transition-colors duration-300 ${active ? "bg-blue-600" : "bg-slate-200"}`}>
-        <div className={`absolute top-1 w-4 h-4 bg-white rounded-full transition-all duration-300 ${active ? "left-7" : "left-1"}`} />
+      
+      {/* Switch Component */}
+      <div className={`w-11 h-6 md:w-12 md:h-7 rounded-full relative transition-all duration-500 shrink-0 ${isOn ? "bg-[#ff00c8]/40" : "bg-white/10"}`}>
+        <div className={`absolute top-1 w-4 h-4 md:w-5 md:h-5 bg-white rounded-full transition-all duration-500 shadow-lg ${isOn ? "left-6 md:left-6" : "left-1"}`} />
       </div>
     </div>
   );

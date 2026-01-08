@@ -3,12 +3,14 @@ import React, { useEffect, useState, useMemo } from "react";
 import axios from "axios";
 import { Search, Inbox, Sparkles } from "lucide-react";
 import { BlogCard, BlogSkeleton } from "../../components/BlogCard";
+import { GuestPostCard, GuestSkeleton } from "../../components/GuestPostCard";
+import { motion, AnimatePresence } from "framer-motion";
 
 export default function BlogListPage() {
   const [allArticles, setAllArticles] = useState<any[]>([]);
   const [categories, setCategories] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
-  
+
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("All");
 
@@ -16,8 +18,6 @@ export default function BlogListPage() {
     const fetchData = async () => {
       try {
         setLoading(true);
-        
-        // Dono APIs se data fetch karna
         const [blogRes, catRes, guestRes] = await Promise.all([
           axios.get("https://belogbackend.vercel.app/blogs"),
           axios.get("https://belogbackend.vercel.app/categories"),
@@ -26,155 +26,180 @@ export default function BlogListPage() {
 
         let combinedData: any[] = [];
 
-        // 1. Normal Blogs ko array mein daalna
         if (blogRes.data.success) {
           combinedData = [...blogRes.data.blogs];
         }
 
-        // 2. Guest Posts ko map karke normal blogs jaisa banana
         if (guestRes.data.success) {
           const approvedGuests = guestRes.data.posts
-            .filter((p: any) => p.status === "approved") // Sirf approved wali
+            .filter((p: any) => p.status === "approved")
             .map((p: any) => ({
               ...p,
-              // Yahan fields match kar rahe hain hum
-              title: p.articleTitle,         
-              image: p.featuredImage,        
-              content: p.articleContent,     
-              author: { username: p.name },  // Author object structure match karna
-              isGuest: true                  // Pehchan ke liye ke ye guest post hai
+              isGuest: true
             }));
-          
+
           combinedData = [...combinedData, ...approvedGuests];
         }
 
-        // 3. Newest First sorting
-        combinedData.sort((a, b) => 
-            new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+        combinedData.sort(
+          (a, b) =>
+            new Date(b.createdAt).getTime() -
+            new Date(a.createdAt).getTime()
         );
 
         setAllArticles(combinedData);
-        if (catRes.data.success) setCategories(catRes.data.categories);
-        
+
+        if (catRes.data.success) {
+          setCategories(catRes.data.categories);
+        }
       } catch (err) {
         console.error("Error fetching articles:", err);
       } finally {
         setLoading(false);
       }
     };
+
     fetchData();
   }, []);
 
-  // Filter Logic (Search + Category)
   const filteredArticles = useMemo(() => {
     return allArticles.filter((item) => {
-      const title = item.title || "";
-      const matchesSearch = title.toLowerCase().includes(searchTerm.toLowerCase());
-      
-      // Category check (Normal blogs aur Guest posts dono ke liye)
-      const itemCatName = item.categoryId?.name || item.category?.name || "";
-      const matchesCategory = selectedCategory === "All" || itemCatName === selectedCategory;
-      
+      const title =
+        item.isGuest ? item.articleTitle || "" : item.title || "";
+
+      const matchesSearch = title
+        .toLowerCase()
+        .includes(searchTerm.toLowerCase());
+
+      const itemCatName =
+        item.categoryId?.name || item.category?.name || "";
+
+      const matchesCategory =
+        selectedCategory === "All" || itemCatName === selectedCategory;
+
       return matchesSearch && matchesCategory;
     });
   }, [searchTerm, selectedCategory, allArticles]);
 
   return (
-    <div className="min-h-screen bg-[#fcfcfc] pb-20">
-      {/* --- HEADER --- */}
-      <header className="bg-white border-b border-slate-100 pt-24 pb-12 px-6">
+    <div className="min-h-screen bg-[radial-gradient(circle_at_50%_50%,_#1a012e_0%,_#0d0118_100%)] text-white pb-32 relative overflow-x-hidden">
+
+      {/* HEADER */}
+      <header className="relative z-10 pt-24 md:pt-40 pb-12 px-4 md:px-6">
         <div className="max-w-7xl mx-auto">
-          <div className="flex flex-col md:flex-row justify-between items-end gap-6">
-            <div className="space-y-3">
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50 border border-blue-100">
-                <Sparkles size={12} className="text-blue-600" />
-                <span className="text-[10px] font-black uppercase tracking-widest text-blue-600">Premium Content</span>
+          <div className="flex flex-col lg:flex-row justify-between items-start lg:items-end gap-10">
+            <div className="space-y-6">
+              <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/5 border border-white/10">
+                <Sparkles size={12} className="text-[#ff00c8]" />
+                <span className="text-[10px] font-black uppercase tracking-[0.2em] text-white/70">
+                  Neural Archives
+                </span>
               </div>
-              <h1 className="text-6xl font-[1000] tracking-tighter text-slate-900 uppercase leading-none">
-                The Library
+
+              <h1 className="text-5xl md:text-7xl lg:text-9xl font-[1000] tracking-tighter uppercase italic leading-[0.85]">
+                The{" "}
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#9b2dee] via-[#e300b4] to-[#ff00c8]">
+                  Library
+                </span>
               </h1>
-              <p className="text-slate-400 font-medium italic">
-                Discover {allArticles.length} curated stories from our elite creators.
+
+              <p className="max-w-md text-white/40 text-sm md:text-lg font-bold italic border-l-2 border-[#e300b4] pl-6 uppercase">
+                Accessing {allArticles.length} digital data streams.
               </p>
             </div>
 
-            <div className="relative w-full md:w-[400px]">
-              <Search className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-300" size={20} />
-              <input 
-                type="text"
-                placeholder="Search articles & authors..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-14 pr-6 py-5 bg-slate-50 border-none rounded-[2rem] focus:ring-2 focus:ring-blue-500/20 outline-none font-bold text-sm transition-all shadow-inner"
-              />
+            {/* SEARCH */}
+            <div className="relative w-full lg:w-[450px]">
+              <div className="relative flex items-center bg-[#1a022d]/60 backdrop-blur-2xl border border-white/10 rounded-[2.5rem] p-2">
+                <div className="p-4 bg-gradient-to-br from-[#9b2dee] to-[#ff00c8] rounded-full">
+                  <Search size={18} />
+                </div>
+                <input
+                  type="text"
+                  placeholder="SEARCH ARCHIVES..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="flex-1 bg-transparent px-6 outline-none font-black text-xs tracking-widest uppercase italic placeholder:text-white/20"
+                />
+              </div>
             </div>
           </div>
 
-          {/* Category Filter Chips */}
-          <div className="flex flex-wrap gap-3 mt-12">
-            <button 
+          {/* FILTERS */}
+          <div className="flex overflow-x-auto gap-4 mt-12 pb-4">
+            <FilterChip
+              label="All Data"
+              active={selectedCategory === "All"}
               onClick={() => setSelectedCategory("All")}
-              className={`px-8 py-3 rounded-2xl text-[10px] font-[1000] uppercase tracking-[0.2em] transition-all ${
-                selectedCategory === "All" 
-                ? "bg-slate-900 text-white shadow-2xl shadow-slate-200 scale-105" 
-                : "bg-white border border-slate-100 text-slate-400 hover:bg-slate-50"
-              }`}
-            >
-              All Topics
-            </button>
+            />
             {categories.map((cat) => (
-              <button 
+              <FilterChip
                 key={cat._id}
+                label={cat.name}
+                active={selectedCategory === cat.name}
                 onClick={() => setSelectedCategory(cat.name)}
-                className={`px-8 py-3 rounded-2xl text-[10px] font-[1000] uppercase tracking-[0.2em] transition-all ${
-                  selectedCategory === cat.name 
-                  ? "bg-blue-600 text-white shadow-2xl shadow-blue-100 scale-105" 
-                  : "bg-white border border-slate-100 text-slate-400 hover:bg-slate-50"
-                }`}
-              >
-                {cat.name}
-              </button>
+              />
             ))}
           </div>
         </div>
       </header>
 
-      {/* --- GRID SECTION --- */}
-      <main className="max-w-7xl mx-auto px-6 mt-20">
-        {loading ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
-            {[1, 2, 3, 4, 5, 6].map((i) => <BlogSkeleton key={i} />)}
-          </div>
-        ) : filteredArticles.length > 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
-            {filteredArticles.map((article, index) => (
-              <div key={article._id} className="relative">
-                {/* Guest Badge agar post guest wali hai */}
-                {article.isGuest && (
-                  <div className="absolute top-4 left-4 z-10 px-3 py-1 bg-amber-400 text-black text-[9px] font-black uppercase rounded-lg shadow-xl">
-                    Guest Post
-                  </div>
-                )}
-                <BlogCard blog={article} index={index} />
-              </div>
-            ))}
-          </div>
-        ) : (
-          <div className="py-40 text-center">
-            <div className="w-24 h-24 bg-slate-50 rounded-[3rem] flex items-center justify-center mx-auto mb-8">
-              <Inbox size={40} className="text-slate-200" />
+      {/* GRID */}
+      <main className="relative z-10 max-w-7xl mx-auto px-4 md:px-6 mt-12">
+        <AnimatePresence mode="wait">
+          {loading ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
+              {[1, 2, 3, 4, 5, 6].map((i) => (
+                <GuestSkeleton key={i} />
+              ))}
             </div>
-            <h3 className="text-2xl font-black text-slate-900 uppercase tracking-tighter">No Articles Found</h3>
-            <p className="text-slate-400 mt-2">Try searching for something else or change the category.</p>
-            <button 
-              onClick={() => {setSearchTerm(""); setSelectedCategory("All")}}
-              className="mt-8 text-blue-600 font-bold underline text-sm"
+          ) : filteredArticles.length > 0 ? (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12"
             >
-              Clear all filters
-            </button>
-          </div>
-        )}
+              {filteredArticles.map((article, index) =>
+                article.isGuest ? (
+                  <GuestPostCard
+                    key={article._id}
+                    post={article}
+                    index={index}
+                  />
+                ) : (
+                  <BlogCard
+                    key={article._id}
+                    blog={article}
+                    index={index}
+                  />
+                )
+              )}
+            </motion.div>
+          ) : (
+            <div className="py-40 text-center">
+              <Inbox size={48} className="mx-auto text-white/10 mb-6" />
+              <h3 className="text-4xl font-[1000] uppercase italic tracking-tighter text-white/40">
+                Archive Void
+              </h3>
+            </div>
+          )}
+        </AnimatePresence>
       </main>
     </div>
+  );
+}
+
+function FilterChip({ label, active, onClick }: any) {
+  return (
+    <button
+      onClick={onClick}
+      className={`px-10 py-4 rounded-[1.5rem] text-[10px] font-black uppercase tracking-widest italic transition-all ${
+        active
+          ? "bg-gradient-to-r from-[#9b2dee] to-[#ff00c8] text-white"
+          : "bg-white/5 text-white/40 hover:bg-white/10"
+      }`}
+    >
+      {label}
+    </button>
   );
 }
