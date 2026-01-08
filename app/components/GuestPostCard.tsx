@@ -2,17 +2,11 @@
 import React from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { ArrowUpRight, Clock, Eye, User } from "lucide-react";
+import { ArrowUpRight, Clock, Eye, Sparkles } from "lucide-react";
 import { formatDistanceToNow } from "date-fns";
-
-/* ======================================================
-   GUEST POST CARD - Pure Independent Component
-   (Removed all blog-related logic and paths)
-====================================================== */
 
 export const GuestPostCard = ({ post, index }: { post: any; index: number }) => {
   
-  // Content length se reading time nikalna
   const calculateReadTime = (content: string) => {
     if (!content) return "1 min read";
     const words = content.trim().split(/\s+/).length;
@@ -20,10 +14,9 @@ export const GuestPostCard = ({ post, index }: { post: any; index: number }) => 
     return `${time} min read`;
   };
 
-  // Article content se HTML tags remove karke short description banana
   const description = post.articleContent 
     ? post.articleContent.substring(0, 100).replace(/<[^>]*>/g, '') + "..." 
-    : "No preview available for this guest story.";
+    : "No preview available for this story.";
 
   return (
     <motion.div
@@ -31,17 +24,17 @@ export const GuestPostCard = ({ post, index }: { post: any; index: number }) => 
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ delay: index * 0.05 }}
-      className="h-full"
+      className="h-full group relative"
     >
-      {/* IMPORTANT: Link path changed to /home/guest-posts/
-          and slug format updated to match your backend (guest-ID)
-      */}
+      {/* Outer Neon Glow Effect */}
+      <div className="absolute -inset-0.5 bg-gradient-to-br from-[#9b2dee]/20 to-[#e300b4]/20 rounded-[2.5rem] blur-xl opacity-0 group-hover:opacity-100 transition-all duration-500" />
+
       <Link 
-       href={`/home/guest-posts/${post.slug}`}
-        className="group flex flex-col h-full bg-white rounded-[2.5rem] border border-slate-100 overflow-hidden hover:shadow-[0_40px_80px_-20px_rgba(0,0,0,0.08)] transition-all duration-500"
+        href={`/home/guest-posts/${post.slug}`}
+        className="relative flex flex-col h-full bg-[#1a022d]/40 backdrop-blur-3xl border border-white/10 rounded-[2.5rem] overflow-hidden group hover:border-white/20 transition-all duration-500"
       >
         {/* Image Section */}
-        <div className="relative h-64 overflow-hidden">
+        <div className="relative h-60 overflow-hidden">
           <img 
             src={post.featuredImage || "https://images.unsplash.com/photo-1499750310107-5fef28a66643"} 
             className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000 ease-out" 
@@ -49,62 +42,59 @@ export const GuestPostCard = ({ post, index }: { post: any; index: number }) => 
           />
           
           {/* Labels */}
-          <div className="absolute top-1 left-6 flex  gap-10">
-            <span className="px-5 py-2.5 bg-amber-400 text-black text-[9px] font-black uppercase tracking-[0.15em] rounded-2xl shadow-xl">
-              Community Guest
-            </span>
-            <span className="px-4 py-2 bg-white/90 backdrop-blur-md text-slate-900 text-[9px] font-black uppercase tracking-widest rounded-xl border border-white/20">
-              {post.category?.name || "Uncategorized"}
+          <div className="absolute top-4 left-4 flex gap-2">
+            <span className="px-4 py-1.5 bg-gradient-to-r from-[#9b2dee] to-[#e300b4] text-white text-[9px] font-[1000] uppercase tracking-widest rounded-xl shadow-lg">
+              Community
             </span>
           </div>
 
-          {/* Quick Stat */}
-          <div className="absolute bottom-6 left-6">
-            <div className="flex items-center gap-1.5 px-3 py-1.5 bg-black/40 backdrop-blur-md rounded-full text-white text-[10px] font-bold border border-white/10 group-hover:bg-amber-500/40 transition-colors">
-              <Eye size={12} className="text-amber-300" /> Community View
+          {/* Views Overlay */}
+          <div className="absolute inset-0 bg-gradient-to-t from-[#0d0118] via-transparent to-transparent opacity-60" />
+          <div className="absolute bottom-4 left-4">
+            <div className="flex items-center gap-1.5 px-3 py-1.5 bg-white/5 backdrop-blur-md rounded-full text-white/70 text-[10px] font-black border border-white/10">
+              <Eye size={12} className="text-[#e300b4]" /> Feed View
             </div>
           </div>
         </div>
 
         {/* Content Section */}
-        <div className="p-10 flex flex-col flex-1">
-          <div className="flex items-center gap-4 text-slate-400 text-[9px] font-black uppercase tracking-widest mb-5">
-            <span className="flex items-center gap-1.5 text-amber-600">
+        <div className="p-8 flex flex-col flex-1">
+          <div className="flex items-center gap-3 text-white/30 text-[9px] font-black uppercase tracking-[0.2em] mb-4">
+            <span className="flex items-center gap-1.5 text-[#9b2dee]">
               <Clock size={12}/> {calculateReadTime(post.articleContent)}
             </span>
             <span>•</span>
             <span>
-              {post.createdAt ? formatDistanceToNow(new Date(post.createdAt)) + " ago" : "Recently"}
+              {post.createdAt ? formatDistanceToNow(new Date(post.createdAt)) + " ago" : "Recent"}
             </span>
           </div>
           
-          <h3 className="text-2xl font-[1000] text-slate-900 mb-4 leading-[1.2] tracking-tighter group-hover:text-amber-600 transition-colors line-clamp-2 italic uppercase">
+          <h3 className="text-xl font-[1000] text-white mb-3 leading-tight tracking-tighter group-hover:text-[#e300b4] transition-colors line-clamp-2 italic uppercase">
             {post.articleTitle}
           </h3>
           
-          <p className="text-slate-500 font-medium line-clamp-2 mb-8 text-sm leading-relaxed">
+          <p className="text-white/40 font-medium line-clamp-2 mb-6 text-sm leading-relaxed">
             {description}
           </p>
 
-          {/* Guest Author Footer */}
-          <div className="mt-auto pt-8 border-t border-slate-100 flex items-center justify-between">
+          {/* Footer */}
+          <div className="mt-auto pt-6 border-t border-white/5 flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-2xl bg-amber-50 border border-amber-100 overflow-hidden flex items-center justify-center">
+              <div className="w-10 h-10 rounded-xl bg-white/5 border border-white/10 overflow-hidden p-0.5">
                 <img
                   src={`https://api.dicebear.com/7.x/initials/svg?seed=${post.name || 'Guest'}`}
-                  alt="guest-avatar"
-                  className="w-full h-full object-cover"
+                  alt="avatar"
+                  className="w-full h-full object-cover rounded-lg"
                 />
               </div>
               <div className="flex flex-col">
-                <span className="text-[10px] font-black uppercase tracking-widest text-slate-400">Contributor</span>
-                <span className="text-xs font-black text-slate-800">{post.name || "Anonymous Guest"}</span>
+                <span className="text-[9px] font-black uppercase tracking-widest text-white/20">Writer</span>
+                <span className="text-xs font-black text-white/80">{post.name || "Guest"}</span>
               </div>
             </div>
             
-            <div className="w-12 h-12 rounded-2xl bg-slate-50 flex items-center justify-center text-slate-400 group-hover:bg-amber-500 group-hover:text-white transition-all transform group-hover:rotate-12 shadow-sm">
-              <ArrowUpRight size={22} />
-              
+            <div className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center text-white/40 group-hover:bg-white group-hover:text-[#0d0118] transition-all transform group-hover:rotate-12">
+              <ArrowUpRight size={18} />
             </div>
           </div>
         </div>
@@ -113,25 +103,17 @@ export const GuestPostCard = ({ post, index }: { post: any; index: number }) => 
   );
 };
 
-/* =========================
-    GUEST SKELETON
-========================= */
 export const GuestSkeleton = () => (
-  <div className="bg-white rounded-[2.5rem] border border-slate-100 p-4 h-[550px] animate-pulse">
-    <div className="h-60 bg-slate-100 rounded-[2rem] mb-8" />
-    <div className="px-6 space-y-4">
-      <div className="h-3 w-1/4 bg-slate-100 rounded" />
-      <div className="h-8 w-full bg-slate-100 rounded" />
-      <div className="h-20 w-full bg-slate-100 rounded" />
+  <div className="bg-white/5 backdrop-blur-3xl rounded-[2.5rem] border border-white/10 p-4 h-[520px] animate-pulse">
+    <div className="h-52 bg-white/5 rounded-[2rem] mb-6" />
+    <div className="px-4 space-y-4">
+      <div className="h-2 w-1/4 bg-white/5 rounded" />
+      <div className="h-6 w-full bg-white/5 rounded" />
+      <div className="h-12 w-full bg-white/5 rounded" />
       <div className="flex items-center gap-3 pt-6">
-        <div className="w-10 h-10 rounded-2xl bg-slate-100" />
-        <div className="h-4 w-24 bg-slate-100 rounded" />
+        <div className="w-10 h-10 rounded-xl bg-white/5" />
+        <div className="h-4 w-24 bg-white/5 rounded" />
       </div>
     </div>
   </div>
 );
-
-/* =========================
-   GUEST SKELETON
-========================= */
- 
