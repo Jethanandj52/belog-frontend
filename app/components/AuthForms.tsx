@@ -10,7 +10,7 @@ export const LoginForm = ({ formData, setFormData, setMode, loading, handleSubmi
     <div className="relative group">
       <Mail className={`${iconStyles} group-focus-within:text-[#e300b4] transition-colors`} size={18} />
       <input
-        type="email" placeholder="Access ID (Email)" required
+        type="email" placeholder="Enter Your Email" required
         className={inputStyles}
         onChange={(e) => setFormData({ ...formData, email: e.target.value })}
       />
@@ -19,7 +19,7 @@ export const LoginForm = ({ formData, setFormData, setMode, loading, handleSubmi
     <div className="relative group">
       <Lock className={`${iconStyles} group-focus-within:text-[#e300b4] transition-colors`} size={18} />
       <input
-        type="password" placeholder="Passcode" required
+        type="password" placeholder="Enter Your Password" required
         className={inputStyles}
         onChange={(e) => setFormData({ ...formData, password: e.target.value })}
       />
@@ -31,7 +31,7 @@ export const LoginForm = ({ formData, setFormData, setMode, loading, handleSubmi
         onClick={() => setMode("forgot")} 
         className="text-[10px] font-black uppercase tracking-widest text-[#9b2dee] hover:text-[#e300b4] transition-colors"
       >
-        Decrypt Password?
+      Forget Password?
       </button>
     </div>
 
@@ -42,7 +42,7 @@ export const LoginForm = ({ formData, setFormData, setMode, loading, handleSubmi
       {loading ? (
         <Loader2 className="animate-spin text-white" />
       ) : (
-        <>Initialize Session <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" /></>
+        <>Login <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" /></>
       )}
     </button>
   </form>
@@ -53,7 +53,7 @@ export const RegisterForm = ({ formData, setFormData, loading, handleSubmit }: a
     <div className="relative group">
       <User className={iconStyles} size={18} />
       <input
-        type="text" placeholder="Creator Handle" required
+        type="text" placeholder="User Name" required
         className={inputStyles}
         onChange={(e) => setFormData({ ...formData, username: e.target.value })}
       />
@@ -62,7 +62,7 @@ export const RegisterForm = ({ formData, setFormData, loading, handleSubmit }: a
     <div className="relative group">
       <Mail className={iconStyles} size={18} />
       <input
-        type="email" placeholder="Neural Mail" required
+        type="email" placeholder="Enter your email" required
         className={inputStyles}
         onChange={(e) => setFormData({ ...formData, email: e.target.value })}
       />
@@ -71,7 +71,7 @@ export const RegisterForm = ({ formData, setFormData, loading, handleSubmit }: a
     <div className="relative group">
       <Lock className={iconStyles} size={18} />
       <input
-        type="password" placeholder="Security Key" required
+        type="password" placeholder="Enter Your Password" required
         className={inputStyles}
         onChange={(e) => setFormData({ ...formData, password: e.target.value })}
       />
@@ -80,7 +80,7 @@ export const RegisterForm = ({ formData, setFormData, loading, handleSubmit }: a
     <div className="relative group">
       <ShieldCheck className={iconStyles} size={18} />
       <input
-        type="password" placeholder="Re-verify Key" required
+        type="password" placeholder="Enter Your Confirm Password" required
         className={inputStyles}
         onChange={(e) => setFormData({ ...formData, confirmPassword: e.target.value })}
       />
@@ -93,7 +93,7 @@ export const RegisterForm = ({ formData, setFormData, loading, handleSubmit }: a
       {loading ? (
         <Loader2 className="animate-spin text-white" />
       ) : (
-        <>Forge Account <Zap size={16} className="fill-[#e300b4] text-[#e300b4]" /></>
+        <>Register<Zap size={16} className="fill-[#e300b4] text-[#e300b4]" /></>
       )}
     </button>
   </form>

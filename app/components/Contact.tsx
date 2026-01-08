@@ -33,7 +33,7 @@ export default function ContactPage() {
             
             <div className="space-y-6">
               <ContactInfo icon={Mail} label="Email Us" val="hello@entrovex.com" />
-              <ContactInfo icon={Phone} label="Call Us" val="+1 Entrovex-HQ" />
+              <ContactInfo icon={Phone} label="Call Us" val="+92 3042507846" />
             </div>
           </motion.div>
 
